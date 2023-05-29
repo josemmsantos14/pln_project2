@@ -1,0 +1,39 @@
+{% extends 'layout.html' %} {% block linksnavbar %}
+
+<!-- navbar -->
+<a class="nav-link active" aria-current="page" href="/">Home</a>
+<a class="nav-link" href="/terms">Medical Terms</a>
+<a class="nav-link" href="/terms/search">Search</a>
+<a class="nav-link" href="/table">Table</a>
+
+{% endblock %} {% block body %}
+
+<form action="/terms/search" method="GET">
+  <div class="container p-4 w-50">
+    <h3>Search Term/Description/Term in English</h3>
+    <label class="form-label">Insert text:</label>
+    <input type="text" class="form-control" name="text" />
+  </div>
+  <div class="container w-50">
+    <button type="submit" class="btn btn-secondary">Search</button>
+  </div>
+</form>
+
+<div class="container p-4 w-50">
+  <ul>
+    {% for designation, description in matched %}
+    <li>
+      <b>
+        <a
+          href="/term/{{designation}}"
+          class="list-group-item list-group-item-light btn-outline-secondary"
+          >{{designation}} (EN: {{description["en"]}})</a
+        ></b
+      >
+      {{description["des"]}}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}

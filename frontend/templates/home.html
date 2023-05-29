@@ -1,10 +1,45 @@
-{% extends 'layout.html'%}
-
-{% block body%}
-
-<h1> {{title}}</h1>
-
-<h3> Bem vindo à aula de NLP de Engenharia Biomédica </h3>
-
-{% endblock %}
-
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Dicionário Médico</title>
+    <style>
+      .header {
+        height: 80px;
+        text-align: center;
+        padding: 15px 0;
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+      }
+      .navbar {
+        padding: 10px;
+        background-color: black;
+        color: white;
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+      }
+      .home {
+        text-align: center;
+        background-color: grey;
+        color: white;
+        height: 100px;
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+      }
+    </style>
+  </head>
+</html>
+<body>
+  <div class="header">
+    <h5>Mestrado em Engenharia Biomédica</h5>
+    <h5>Processamento de Linguagem Natural - 2022/2023</h5>
+  </div>
+  <div class="navbar">
+    <a href="/dicionario">Termos</a>
+    <a href="/creditos">Creditos</a>
+    <a href="/home">Home</a>
+  </div>
+  <div class="home">
+    <h1>Dicionário Médico</h1>
+    <button type="button">Termos</button>
+  </div>
+</body>

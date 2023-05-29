@@ -1,43 +1,82 @@
-{% extends 'layout.html'%}
+{% extends 'layout.html' %} {% block styles %}
 
+<style>
+  .collapse {
+    width: 9rem;
+    top: 3.5rem;
+    left: 4.4rem;
+    z-index: 1;
+  }
+  .collapse a:hover {
+    background-color: rgba(128, 128, 128, 0.25);
+  }
+</style>
 
-{% block body%}
+{% endblock %} {% block linksnavbar %}
 
-<!--Comentar-->
-<!--<div style="padding-left: 60px !important; padding-right: 60px !important;">-->
-<form action="/term" method="POST">
-    <div class="mb-3">
-      <label class="form-label">Designation</label>
-      <input type="text" class="form-control" name="designation">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Description</label>
-        <input type="text" class="form-control" name="description">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
-
-
-{%if message%}
-{{message}}
-{% endif %}
-
-<hr>
-
-<div class="list-group">
-
-    {% for d in designations %} 
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <a href="/term/{{d}}" class="list-group-item list-group-item-action">{{d}}</a>
-            <button onclick="deleteTerm('{{d}}')">Delete</button>
-        </li>
-
-
-    {% endfor %}
-  
+<a class="nav-link" aria-current="page" href="/">Home</a>
+<a
+  class="nav-link active border border-left-light d-flex align-items-center"
+  data-bs-toggle="collapse"
+  href="#multiCollapseExample1"
+  role="button"
+  aria-expanded="false"
+  aria-controls="multiCollapseExample1"
+  >Medical Terms <i class="material-icons">expand_more</i></a
+>
+<div
+  class="border border-secondary bg-white collapse multi-collapse position-absolute"
+  id="multiCollapseExample1"
+>
+  <a href="/addterm" class="btn mw-100 text-black">Add new term</a>
 </div>
-
+<a class="nav-link" href="/terms/search">Search</a>
+<a class="nav-link" href="/table">Table</a>
 
 {% endblock %}
 
+<!-- {% block search %}
+<form class="form-inline">
+  <input
+    class="form-control mr-sm-2"
+    id="searchInp"
+    onkeyup="mySearch()"
+    type="search"
+    placeholder="Search"
+    aria-label="Search"
+  />
+</form>
+{% endblock %}  -->
+
+{% block body %}
+
+<!-- Tabela com os termos -->
+
+<div class="container p-4 w-50">
+  <h3>Terms</h3>
+  <div class="list-group">
+    {% for d in designations %}
+    <li
+      class="list-group-item d-flex justify-content-between align-items-center"
+    >
+      <a
+        href="/term/{{d}}"
+        class="list-group-item list-group-item-light btn-outline-secondary w-75"
+        id="section-{{ d[0] }}"
+        >{{d}}</a
+      >
+      <div>
+        <button
+          type="button"
+          class="btn btn-danger"
+          onclick="deleteTerm('{{d}}')"
+        >
+          Delete
+        </button>
+      </div>
+    </li>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

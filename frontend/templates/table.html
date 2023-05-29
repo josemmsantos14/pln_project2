@@ -1,0 +1,40 @@
+{% extends 'layout.html' %} {% block linksnavbar %}
+
+<!-- navbar -->
+<a class="nav-link active" aria-current="page" href="/">Home</a>
+<a class="nav-link" href="/terms">Medical Terms</a>
+<a class="nav-link" href="/terms/search">Search</a>
+<a class="nav-link" href="/table">Table</a>
+
+{% endblock %} {% block body %}
+
+<div class="container p-4 w-75">
+  <h3>Table</h3>
+  <table id="example" class="display" style="width: 100%">
+    <thead>
+      <tr>
+        <th>Term</th>
+        <th>Translation EN</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for key, d in designations %}
+      <tr>
+        <td>{{ key }}</td>
+        <td>{{ d["en"] }}</td>
+        <td>{{ d["des"] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Term</th>
+        <th>Translation EN</th>
+        <th>Description</th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+{% endblock %}

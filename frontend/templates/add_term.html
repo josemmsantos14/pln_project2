@@ -1,0 +1,33 @@
+{% extends 'layout.html' %} {% block linksnavbar %}
+
+<a class="nav-link" aria-current="page" href="/">Home</a>
+<a class="nav-link active border border-left-light" href="/terms"
+  >Medical Terms</a
+>
+<a class="nav-link" href="/terms/search">Search</a>
+
+{% endblock %} {% block body %}
+
+<!-- Adição de novos termos  -->
+<div class="container p-4 w-50">
+  <h3>Add Term</h3>
+
+  <form action="/terms" method="POST">
+    <div class="mb-3">
+      <label class="form-label">Designation:</label>
+      <input type="text" class="form-control" name="designation" required />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Term in English:</label>
+      <input type="text" class="form-control" name="translation" required />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Description:</label>
+      <input type="text" class="form-control" name="description" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+  </form>
+
+  {% if message %} {{message}} {% endif %}
+</div>
+{% endblock %}
