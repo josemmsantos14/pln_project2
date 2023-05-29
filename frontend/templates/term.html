@@ -1,0 +1,31 @@
+{% extends 'layout.html'%}
+
+
+{% block body%}
+
+<style>
+    .card-custom {
+        background-color: powderblue; /* Defina a cor desejada */
+    }
+
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Define a altura da página */
+    }
+</style>
+
+<div class="center">
+    <div class="card text-center mb-3 card-custom" style="max-width: 18rem;">
+        <div class="card-header">Designation: {{designation}}</div>
+        <div class="card-body">
+            <h5 class="card-title">Description: {{value["des"]}}</h5>
+            <p class="card-text-center">EN: {{value["en"]}}</p>
+        </div>
+    </div>
+</div>
+
+    
+
+{% endblock %}

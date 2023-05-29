@@ -1,0 +1,43 @@
+{% extends 'layout.html'%}
+
+
+{% block body%}
+
+<!--Comentar-->
+<!--<div style="padding-left: 60px !important; padding-right: 60px !important;">-->
+<form action="/term" method="POST">
+    <div class="mb-3">
+      <label class="form-label">Designation</label>
+      <input type="text" class="form-control" name="designation">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <input type="text" class="form-control" name="description">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+
+{%if message%}
+{{message}}
+{% endif %}
+
+<hr>
+
+<div class="list-group">
+
+    {% for d in designations %} 
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="/term/{{d}}" class="list-group-item list-group-item-action">{{d}}</a>
+            <button onclick="deleteTerm('{{d}}')">Delete</button>
+        </li>
+
+
+    {% endfor %}
+  
+</div>
+
+
+{% endblock %}
+
