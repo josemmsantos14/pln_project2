@@ -19,9 +19,10 @@ def extractDiseaseList(div):
     return title, desc
 
 
-url = "https://www.atlasdasaude.pt/doencasAaZ"
-url2 = "https://www.atlasdasaude.pt"
-html = requests.get(url).text
+# url_medico = "https://www.mdsaude.com/glossario/"
+url_cuf = "https://www.cuf.pt/saude-a-z"
+search_select = "?pesquisa=&grande_area="
+html = requests.get(url_cuf).text
 
 soup = BeautifulSoup(html,"html.parser")
 
