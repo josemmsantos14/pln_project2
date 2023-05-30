@@ -1,6 +1,7 @@
 import requests
 import json
 import time
+import random
 from bs4 import BeautifulSoup
 
 #region VariblesDeclar
@@ -66,70 +67,67 @@ for ul_secondary in ul_list_all_letters:
 
 #region ProcessThirdPage
 
-
+count = 0
+header = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.9",
+    # "Referer": "https://www.example.com",
+    # Add more headers if required
+}
 for disease, url_disease in url_dic_disease.items():
+    count += 1
     text = ""
     title = ""
+    infos_container = None
     disease_info.clear()
     
     print(disease, " : ", url_disease, "\n")
-    
-    disease_page = BeautifulSoup(requests.get(url_disease).text,"html.parser")
-    time.sleep(1)
+
+    # if count % 10 == 0:
+    #     time.sleep(100)
+    # while(infos_container == None):
+    #     disease_page = BeautifulSoup(requests.get(url_disease).text,"html.parser")
+    #     # time.sleep(5)
+    #     print(disease_page)
+    #     try:
+    #         infos_container = disease_page.find("div", class_="content").find("div", id= "phmaincontent_0_ctl01_divByLine").find_next_sibling("div")
+    #     except Exception:
+    #         time.sleep(10)
+    #         infos_container = None
+
+    disease_page = BeautifulSoup(requests.get(url_disease, headers=header).text,"html.parser")
+    # time.sleep(random.choice([5,8,10,15,15,15,20,20,20,20]))
+    time.sleep(5)
     print(disease_page)
-    if disease_page is not None:
-        infos_container = disease_page.find("div", class_="content").find("div", id= "phmaincontent_0_ctl01_divByLine").find_next_sibling("div")
-        if infos_container is not None:
-            for tag in infos_container.children:
-                if tag.name == "h2" and tag.text != "":
-                    # PARA GUARDAR OS TITLE E TEXT PELO MEIO
-                    if title != "" and text != "":
-                        disease_info[title] = text
-                    title = tag.text
-                    text = ""
-                    
-                    # print("HEADER_2: ", tag, "\n")
-                # elif title != "" and tag.name == "h3" and tag.text != "":
-                #     semi_title = tag.text
-                #     text = ""
-                elif (tag.name == "p" or tag.name == "ul" or tag.name == "h3") and tag.text != "":
-                    text += str(tag)
+    infos_container = disease_page.find("div", class_="content").find("div", id= "phmaincontent_0_ctl01_divByLine").find_next_sibling("div")
+    for tag in infos_container.children:
+        if tag.name == "h2" and tag.text != "":
+            # PARA GUARDAR OS TITLE E TEXT PELO MEIO
+            if title != "" and text != "":
+                disease_info[title] = text
+            title = tag.text
+            text = ""
+            
+            # print("HEADER_2: ", tag, "\n")
+        # elif title != "" and tag.name == "h3" and tag.text != "":
+        #     semi_title = tag.text
+        #     text = ""
+        elif (tag.name == "p" or tag.name == "ul" or tag.name == "h3") and tag.text != "":
+            text += str(tag)
 
-            # PARA GUARDAR OS TITLE E TEXT FINAL
-            disease_info[title] = text
-            # PARA GUARDAR TODAS AS INFORMAÇÕES RELATIVAS A CADA DOENÇA
-            disease_all_info[disease] = disease_info
-
-        else:
-            print("infos_container not found")
-    else:
-        print("disease_page not found")
+    # PARA GUARDAR OS TITLE E TEXT FINAL
+    disease_info[title] = text
+    # PARA GUARDAR TODAS AS INFORMAÇÕES RELATIVAS A CADA DOENÇA
+    disease_all_info[disease] = disease_info
 
 print(disease_all_info)
+
 #endregion 
 
-# urls = []
-# for div in divs:
-#     url = "https://www.atlasdasaude.pt"
-#     urls.append(url + div.a["href"])
+#region SaveFile
 
-# lista = []
-# for url in urls:
-#     html_ = requests.get(url).text
-#     soup_ = BeautifulSoup(html_, "html.parser")
+file = open("./output/en_diseases.json","w", encoding="utf8")
+json.dump(disease_all_info,file, ensure_ascii=False, indent = 4)
+file.close()
 
-#     divs = soup_.find_all("div", class_="views-row")
-#     for div in divs:
-        
-#         page_url = url2 + div.div.h3.a["href"]
-#         page_info = extractDiseasePage(page_url)
-#         title, desc = extractDiseaseList(div)
-#         lista.append({title.strip():{"desc":desc.strip(),"page":page_info}})
-
-        
-# print(lista)
-# file = open("./output/en_diseases.json","w", encoding="utf8")
-# json.dump(lista,file, ensure_ascii=False, indent = 4)
-# file.close()
-
-#print("\n\n".join(urls))
+#endregion
