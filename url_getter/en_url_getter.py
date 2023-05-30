@@ -96,8 +96,7 @@ for disease, url_disease in url_dic_disease.items():
     #         infos_container = None
 
     disease_page = BeautifulSoup(requests.get(url_disease, headers=header).text,"html.parser")
-    # time.sleep(random.choice([5,8,10,15,15,15,20,20,20,20]))
-    time.sleep(5)
+    # time.sleep(5) # ------------------------------------------------------------------------------------ se os headers nao resolverem acrescentem
     print(disease_page)
     infos_container = disease_page.find("div", class_="content").find("div", id= "phmaincontent_0_ctl01_divByLine").find_next_sibling("div")
     for tag in infos_container.children:
