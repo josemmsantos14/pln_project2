@@ -1,62 +1,63 @@
 import requests
-import json
+import json, re
 from bs4 import BeautifulSoup
 
-def extractDiseasePage(url):
-    page_html = requests.get(url).text
-    page_soup = BeautifulSoup(page_html, "html.parser")
+def content(heading):
+    content = ""
+    if heading:
+        next_tag = heading.find_next()
+        while next_tag and next_tag.name != "h2":
+            #content += next_tag.get_text()
+            content += str(next_tag)
+            next_tag = next_tag.find_next()
+    #content = re.sub("\n", " ", content)
+    return content
 
-    page_div = page_soup.find("div", class_="field-name-body")
-    res = page_div.div.div
-    res.name = "page"
-    res.attrs = {}
-    return str(res)
+url_es = "https://middlesexhealth.org/learning-center/espanol/enfermedades-y-afecciones"
+url_es_1 = "https://middlesexhealth.org"
 
-def extractDiseaseList(div):
-    desc = div.find("div", class_="field-content").text
-    title = div.div.h3.a.text
-    #print(div, end="\n\n")
-    return title, desc
+html = requests.get(url_es).text
+soup = BeautifulSoup(html, "html.parser")
 
+divs = soup.find_all("div", class_="service-content")
 
-url_mayo = "https://www.mayoclinic.org/diseases-conditions/"
-search_select = "index?letter="
-html = requests.get(url_mayo).text
+urls = []
+for div in divs:
+    url = url_es_1 + div.findAll("p")[1].a["href"]
+    urls.append(url)
 
-# print("html:" + html)
+dici = {}
+for u in urls:
+    html_ = requests.get(u).text
+    soup_ = BeautifulSoup(html_, "html.parser")
 
-soup = BeautifulSoup(html,"html.parser")
+    term = soup_.find("div", class_="col-12").text.strip()
+    info = soup_.find("div", class_="edit-module").text
 
-div_principal = soup.find("div", class_="cmp-alphabet-facet cmp-button__inner--type-circle cmp-button__inner--color-primary-inverse")
-ul = div_principal.ul
-list_items = ul.findAll("li")
+    description_heading = soup_.find("h2", string="Perspectiva general")
+    diagnosis_heading = soup_.find("h2", string="Diagnóstico")
+    causes_heading = soup_.find("h2", string="Causas")
+    symptoms_heading = soup_.find("h2", string="Síntomas")
+    treatment_heading = soup_.find("h2", string="Tratamiento")
+    prevention_heading = soup_.find("h2", string="Prevención")
 
-for li in list_items:
-    
+    description = content(description_heading)
+    symptoms = content(symptoms_heading)
+    causes = content(causes_heading)
+    diagnosis = content(diagnosis_heading)
+    treatment = content(treatment_heading)
+    prevention = content(prevention_heading)
 
+    dici[term] = {  "Descripción": description,
+                    "Síntomas": symptoms, 
+                    "Causas": causes, 
+                    "Diagnóstico": diagnosis, 
+                    "Tratamiento": treatment, 
+                    "Prevención": prevention
+    }
 
-# urls = []
-# for div in divs:
-#     url = "https://www.atlasdasaude.pt"
-#     urls.append(url + div.a["href"])
+print(dici)
 
-# lista = []
-# for url in urls:
-#     html_ = requests.get(url).text
-#     soup_ = BeautifulSoup(html_, "html.parser")
-
-#     divs = soup_.find_all("div", class_="views-row")
-#     for div in divs:
-        
-#         page_url = url2 + div.div.h3.a["href"]
-#         page_info = extractDiseasePage(page_url)
-#         title, desc = extractDiseaseList(div)
-#         lista.append({title.strip():{"desc":desc.strip(),"page":page_info}})
-
-        
-# print(lista)
-# file = open("Aula9/doencas.json","w", encoding="utf8")
-# json.dump(lista,file, ensure_ascii=False, indent = 4)
-# file.close()
-
-#print("\n\n".join(urls))
+file = open("doencas.json", "w", encoding="utf-8")
+json.dump(dici, file, ensure_ascii=False, indent=4)
+file.close()
