@@ -97,7 +97,7 @@ for disease, url_disease in url_dic_disease.items():
 
     disease_page = BeautifulSoup(requests.get(url_disease, headers=header).text,"html.parser")
     # time.sleep(5) # ------------------------------------------------------------------------------------ se os headers nao resolverem acrescentem
-    print(disease_page)
+    # print(disease_page)
     infos_container = disease_page.find("div", class_="content").find("div", id= "phmaincontent_0_ctl01_divByLine").find_next_sibling("div")
     for tag in infos_container.children:
         if tag.name == "h2" and tag.text != "":
@@ -119,13 +119,13 @@ for disease, url_disease in url_dic_disease.items():
     # PARA GUARDAR TODAS AS INFORMAÇÕES RELATIVAS A CADA DOENÇA
     disease_all_info[disease] = disease_info
 
-print(disease_all_info)
+# print(disease_all_info)
 
 #endregion 
 
 #region SaveFile
 
-file = open("./output/en_diseases.json","w", encoding="utf8")
+file = open("output/en_diseases.json","w", encoding="utf8")
 json.dump(disease_all_info,file, ensure_ascii=False, indent = 4)
 file.close()
 

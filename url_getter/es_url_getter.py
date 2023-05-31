@@ -58,6 +58,6 @@ for u in urls:
 
 print(dici)
 
-file = open("doencas.json", "w", encoding="utf-8")
+file = open("output/es_diseases.json", "w", encoding="utf-8")
 json.dump(dici, file, ensure_ascii=False, indent=4)
 file.close()

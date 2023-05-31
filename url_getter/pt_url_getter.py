@@ -69,6 +69,6 @@ for category_url in category_urls:
             page_number += 1
         
 #print(lista)
-file = open("doencastrabalho.json", "w", encoding="utf-8")
+file = open("output/pt_diseases.json", "w", encoding="utf-8")
 json.dump(lista, file, ensure_ascii=False, indent=4)
 file.close()
