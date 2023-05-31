@@ -39,36 +39,32 @@ headers = {
 html = requests.get(url, headers=headers).text
 soup = BeautifulSoup(html, "html.parser")
 
-
 options = soup.find_all("option")
 
-category_urls = []
+category_dict = {}
 
 for option in options:
-    category_urls.append(url2 + option["value"])
-
-lista=[]   
-urls = []
-for category_url in category_urls:
+    category_url = url2 + option["value"]
+    category_name = extractCategory(soup)
+    if category_name not in category_dict:
+        category_dict[category_name] = {}
     page_number = 0
     while True:
         urlp = f"{category_url}&page={page_number}"
         html = requests.get(urlp, headers=headers).text
         soup = BeautifulSoup(html, "html.parser")
-        categoria= extractCategory(soup)
         divs = soup.find_all("div", class_="views-row")
         for div in divs:
             page_url = url1 + div.div.span.a["href"]
             page_info = extractDiseasePage(page_url)
             title = extractDiseaseListPage(div)
-            lista.append({categoria:{title:page_info}})
+            category_dict[category_name][title] = page_info
         next_page = soup.find("li", class_="pager__item pager__item--next")
         if next_page is None or not next_page.find("a", href=True):
             break
         else:
             page_number += 1
         
-#print(lista)
 file = open("output/pt_diseases.json", "w", encoding="utf-8")
-json.dump(lista, file, ensure_ascii=False, indent=4)
+json.dump(category_dict, file, ensure_ascii=False, indent=4)
 file.close()
