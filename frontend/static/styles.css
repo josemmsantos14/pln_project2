@@ -1,0 +1,174 @@
+:root {
+  --light-light-blue: #fdfeff;
+  --light-blue: #b9d6f2;
+  --first-blue: #0353a4;
+  --second-blue: #006daa;
+  --third-blue: #003559;
+  --dark-blue: #061a40;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* ------------------------------NAVBAR------------------------------------- */
+.navbar {
+  background-color: var(--dark-blue);
+  color: var(--light-blue);
+  height: 4rem;
+  padding: 0 10rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.navbar .nav-title {
+  margin: 0;
+}
+.navbar .nav-title::after {
+  content: "Disease Glossary";
+  position: absolute;
+  left: 9rem;
+  top: 0.5rem;
+  filter: blur(0.2rem);
+  margin: 0;
+}
+.navbar ul {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  margin: 0;
+}
+.navbar ul .nav-link {
+  width: 10rem;
+  padding: 0.7rem 1rem;
+  margin: 0 2rem;
+  text-align: center;
+  transition: all 0.8s ease;
+}
+.navbar ul .nav-link:hover,
+.navbar ul .nav-link:focus {
+  /* border-bottom: 1px solid var(--ligh-blue); */
+  border-radius: 0.5rem;
+  box-shadow: inset 10rem 0 0 0 var(--light-blue);
+  color: var(--dark-blue);
+}
+/* --------------------------------------------------------------------------- */
+
+/* ------------------------------WELCOME------------------------------------- */
+.welcome-container {
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* --------------------------------------------------------------------------- */
+
+/* ------------------------------TERMS------------------------------------- */
+.terms-container {
+  padding: 3rem 8rem;
+}
+.terms-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  margin: 0 0 2rem 0;
+  color: var(--third-blue);
+}
+.terms-title {
+  display: block;
+}
+.filters {
+  /* height: 4rem; */
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  flex-direction: column;
+}
+.filters form {
+  /* height: 4rem; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.filter-select {
+  width: 9rem;
+  height: 2rem;
+  text-align: center;
+  margin: 0.3rem 0;
+  border-radius: 0.5rem;
+  color: var(--third-blue);
+}
+.term-row {
+  padding: 0.4rem 0.5rem 0.4rem 0;
+}
+.term-link {
+  margin: 0 0.5rem;
+  height: 2.5rem;
+  width: 100%;
+}
+.delete-term-container {
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.delete-term-container button {
+  height: 2.5rem;
+  width: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: red;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: none;
+}
+.term-row:hover ~ .delete-term-container {
+  display: flex;
+}
+/* --------------------------------------------------------------------------- */
+
+/* ------------------------------TERM------------------------------------- */
+.term-container {
+  padding: 3rem 8rem;
+}
+.term-title {
+  background-color: var(--third-blue);
+  color: var(--light-blue);
+  padding: 1rem 2rem;
+}
+.info-btn {
+  width: 8rem;
+  border: 0.05rem solid var(--third-blue);
+  color: var(--third-blue);
+}
+.info-btn:hover {
+  background-color: var(--third-blue);
+  color: var(--light-blue);
+}
+.info-btn:focus,
+.info-btn:active {
+  background-color: var(--second-blue);
+  color: var(--light-blue);
+}
+/* --------------------------------------------------------------------------- */
+
+/* ------------------------------FOOTER------------------------------------- */
+.footer {
+  background-color: var(--dark-blue);
+  width: 100%;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0;
+  color: var(--light-blue);
+  position: absolute;
+  bottom: 0;
+  margin: 0;
+}
+/* --------------------------------------------------------------------------- */

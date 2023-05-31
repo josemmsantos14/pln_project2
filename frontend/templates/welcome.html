@@ -1,22 +1,16 @@
-{% extends 'layout.html' %} {% block linksnavbar %}
+{% extends 'layout.html' %} {% block body %}
 
-<!-- navbar -->
-<a class="nav-link active" aria-current="page" href="/">Home</a>
-<a class="nav-link" href="/terms">Medical Terms</a>
-<a class="nav-link" href="/terms/search">Search</a>
-<a class="nav-link" href="/table">Table</a>
-
-{% endblock %} {% block body %}
-
-<div
-  class="container d-flex justify-content-center align-items-center flex-column py-5"
-  style="text-align: center"
->
-  <h1>Dicionário Médico</h1>
+<div class="welcome-container">
   <img
     src="https://www.intermundial.pt/var/ezdemo_site/storage/images/longforms/diccionario-del-seguro/parrafo-2-1-parrafo-terminos/357890-24-por-PT/parrafo-2-1-parrafo-Terminos.png"
     alt=""
   />
 </div>
+
+{% endblock %} {% block footer %}
+
+<footer class="footer">
+  <span>Desenvolvida na aula Engenharia Biomédica 2022/2023</span>
+</footer>
 
 {% endblock %}

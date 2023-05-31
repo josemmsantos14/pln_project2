@@ -1,0 +1,48 @@
+{% extends 'layout.html' %} 
+
+{% block body %}
+
+<div class="term-container">
+<h3 class="term-title rounded">{{designation}} - ES</h3>
+  <p>
+    <a
+      class="info-btn btn btn-outline-secondary"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#collapseDes"
+      aria-expanded="false"
+      aria-controls="collapseDes"
+    >
+      Description
+    </a>
+    <div class="collapse" id="collapseDes">
+      <div class="card card-body">{{value['des']}}</div>
+    </div>
+  </p>
+  <p>
+    <a
+      class="info-btn btn btn-outline-secondary"
+      type="button"
+      href="/term/{{designation}}"
+    >
+      PT
+    </a>
+    <div class="collapse" id="collapseEn">
+      <div class="card card-body">{{value['en']}}</div>
+    </div>
+  </p>
+  <p>
+    <a
+      class="info-btn btn btn-outline-secondary"
+      type="button"
+      href="/term/en/{{designation}}"
+    >
+      EN
+    </a>
+    <div class="collapse" id="collapseEs">
+      <div class="card card-body">{{value['en']}}</div>
+    </div>
+  </p>
+</div>
+
+{% endblock %}

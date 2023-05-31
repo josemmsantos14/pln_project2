@@ -1,0 +1,105 @@
+{% extends 'layout.html' %}
+
+<!-- {% block search %}
+<form class="form-inline">
+  <input
+    class="form-control mr-sm-2"
+    id="searchInp"
+    onkeyup="mySearch()"
+    type="search"
+    placeholder="Search"
+    aria-label="Search"
+  />
+</form>
+{% endblock %}  -->
+
+{% block body %}
+
+<!-- Filtros -->
+
+<div class="terms-container">
+  <div class="terms-header">
+    {% if categorie %}
+    <h3 class="terms-title">{{categorie}}</h3>
+    {% else %}
+    <h3 class="terms-title">Glossary</h3>
+    {% endif %}
+    <div class="filters">
+      <form action="" method="POST" enctype="multipart/form-data">
+        <select class="filter-select" name="categories" id="categories">
+          <option value="default" selected disabled hidden>
+            -- Categories --
+          </option>
+          <option value="all">All</option>
+          <option value="+65">+65</option>
+          <option value="cardiac">Cardiac</option>
+          <option value="pulmonary">Pulmonary</option>
+        </select>
+
+        <select class="filter-select" name="format" id="format">
+          <option value="default" selected disabled hidden>-- Format --</option>
+          <option value="list">List</option>
+          <option value="table">Table</option>
+        </select>
+        <input type="submit" id="submit-format" />
+      </form>
+    </div>
+  </div>
+
+  <!-- Lista com os termos -->
+  <div class="content">
+    {% if format_data == "table": %}
+
+    <table id="example" class="display" style="width: 100%">
+      <thead>
+        <tr>
+          <th>Term</th>
+          <th>Translation EN</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for key, d in designations_table %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ d["en"] }}</td>
+          <td>{{ d["des"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>Term</th>
+          <th>Translation EN</th>
+          <th>Description</th>
+        </tr>
+      </tfoot>
+    </table>
+
+    {% else %}
+
+    <div class="list-group">
+      {% for d in designations %}
+      <li
+        class="term-row list-group-item d-flex justify-content-between align-items-center"
+        onmouseover="appearDelete()"
+      >
+        <a
+          href="/term/{{d}}"
+          class="term-link list-group-item list-group-item-light btn-outline-secondary"
+          id="section-{{ d[0] }}"
+          >{{d}}</a
+        >
+        <div class="delete-term-container">
+          <button type="button" onclick="deleteTerm('{{d}}')">
+            <i class="material-icons">delete</i>
+          </button>
+        </div>
+      </li>
+      {% endfor %}
+    </div>
+
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

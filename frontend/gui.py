@@ -11,17 +11,28 @@ db = json.load(file)
 def home():
     return render_template("welcome.html", title="Welcome!")
 
-@app.route("/dicionario")
-def dicionario_medico():
-    return render_template('dicionario_medico.html')
-
-@app.route("/terms")
+@app.route("/terms", methods=['GET','POST'])
 def terms():
-    return render_template('terms.html', designations=db.keys())
+    categories_opt = None
+    format_opt = None
+    if request.method == "POST":
+        categories_opt = request.form.get("categories")
+        format_opt = request.form.get("format")
+        print(format_opt)
+        print(categories_opt)
+    return render_template('terms/terms.html', designations=db.keys(), designations_table=db.items(), categorie = categories_opt, format_data = format_opt)
 
 @app.route("/term/<t>")
-def term(t):
-    return render_template('term.html', designation=t, value=db.get(t,"None"))
+def term_pt(t):
+    return render_template('terms/term_pt.html', designation=t, value=db.get(t,"None"))
+
+@app.route("/term/en/<t>")
+def term_en(t):
+    return render_template('terms/term_en.html', designation=t, value=db.get(t,"None"))
+
+@app.route("/term/es/<t>")
+def term_es(t):
+    return render_template('terms/term_es.html', designation=t, value=db.get(t,"None"))
 
 @app.route("/addterm")
 def addterm():

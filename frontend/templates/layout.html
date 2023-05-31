@@ -2,7 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>PLN</title>
+    <title>Disease Glossary - PLN</title>
+    <link
+      rel="icon"
+      href="https://leonardodavinci.stanford.edu/submissions/clabaugh/images/vm/leonardo.jpg"
+    />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -17,24 +21,28 @@
       integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+      type="text/css"
+    />
     {% block styles %} {% endblock %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light">
-      <div class="container-fluid">
-        <div class="navbar-nav">{% block linksnavbar %} {% endblock %}</div>
-        <!-- {% block search %} {% endblock %} -->
-      </div>
+    <nav class="navbar">
+      <!-- navbar -->
+      <h4 class="nav-title">Disease GLossary</h4>
+      <ul>
+        <li><a class="nav-link" href="/">Home</a></li>
+        <li><a class="nav-link" href="/terms">Glossary</a></li>
+        <li><a class="nav-link" href="/terms/search">Search</a></li>
+        <!-- <li><a class="nav-link" href="/table">Table</a></li> -->
+      </ul>
+      <!-- {% block search %} {% endblock %} -->
     </nav>
-    <div>{% block body %} {% endblock %}</div>
+    <main class="container">{% block body %} {% endblock %}</main>
 
-    <footer
-      class="d-flex justify-content-center align-items-center py-2 border-top bg-dark text-light fixed-bottom"
-    >
-      <div class="container text-center">
-        <span>Desenvolvida na aula Engenharia Biomédica 2022/2023</span>
-      </div>
-    </footer>
+    {% block footer %} {% endblock %}
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -49,6 +57,7 @@
 
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="../static/script.js"></script>
+    {% block script %} {% endblock %}
     <!-- <script>
       function mySearch() {
         var input, filter, divItem, a, i, txtValue;
