@@ -33,11 +33,20 @@
       <!-- navbar -->
       <h4 class="nav-title">Disease GLossary</h4>
       <ul>
-        <li><a class="nav-link" href="/">Home</a></li>
+        <li><a class="nav-link" href="/welcome">Home</a></li>
         <li><a class="nav-link" href="/terms">Glossary</a></li>
         <li><a class="nav-link" href="/terms/search">Search</a></li>
         <!-- <li><a class="nav-link" href="/table">Table</a></li> -->
       </ul>
+      {% if userType %}
+      <div class="user-infos">
+        <h6 class="user-type">{{userType}}</h6>
+        {% endif %}
+        <a class="nav-link" id="sign-out" href="/" title="Logout"
+          ><i class="material-icons">call_missed_outgoing</i></a
+        >
+      </div>
+
       <!-- {% block search %} {% endblock %} -->
     </nav>
     <main class="container">{% block body %} {% endblock %}</main>

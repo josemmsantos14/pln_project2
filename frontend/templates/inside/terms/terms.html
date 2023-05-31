@@ -90,11 +90,13 @@
           id="section-{{ d[0] }}"
           >{{d}}</a
         >
+        {% if userType == "admin": %}
         <div class="delete-term-container">
           <button type="button" onclick="deleteTerm('{{d}}')">
             <i class="material-icons">delete</i>
           </button>
         </div>
+        {% endif %}
       </li>
       {% endfor %}
     </div>

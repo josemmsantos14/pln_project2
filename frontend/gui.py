@@ -1,15 +1,45 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect
 import json
 import re
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
+app.secret_key = "pln_proj_2"
 
 file = open("terms.json", encoding="utf-8")
 db = json.load(file)
 
-@app.route("/")
+# --------------------USERS-----------------------------------------------------------------
+user1 = { "name" : "user1", "pass" : "12345", "isAdmin" : "admin"}
+user2 = { "name" : "user2", "pass" : "12345", "isAdmin" : "user"}
+users = [user1, user2]
+# ------------------------------------------------------------------------------------------
+@app.route("/", methods=['GET','POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        for user in users:
+            if user["name"] == username and user["pass"] == password:
+                # print("user: ", username)
+                # print("pass: ", password)
+                session['user'] = user["name"]
+                session['pass'] = user["pass"]
+                session['isAdmin'] = user["isAdmin"]
+                return redirect("/welcome")
+            else:
+                error = 'Invalid Credentials. Please try again.'
+    return render_template("login.html", error=error)
+
+
+# ------------------------------------------------------------------------------------------
+
+@app.route("/welcome")
 def home():
-    return render_template("welcome.html", title="Welcome!")
+    print(session["isAdmin"])
+    return render_template("inside/welcome.html", userType = session["isAdmin"])
+
+# ------------------------------------------------------------------------------------------
 
 @app.route("/terms", methods=['GET','POST'])
 def terms():
@@ -20,23 +50,23 @@ def terms():
         format_opt = request.form.get("format")
         print(format_opt)
         print(categories_opt)
-    return render_template('terms/terms.html', designations=db.keys(), designations_table=db.items(), categorie = categories_opt, format_data = format_opt)
+    return render_template('inside/terms/terms.html', designations=db.keys(), designations_table=db.items(), categorie = categories_opt, format_data = format_opt, userType = session["isAdmin"])
 
 @app.route("/term/<t>")
 def term_pt(t):
-    return render_template('terms/term_pt.html', designation=t, value=db.get(t,"None"))
+    return render_template('inside/terms/term_pt.html', designation=t, value=db.get(t,"None"), userType = session["isAdmin"])
 
 @app.route("/term/en/<t>")
 def term_en(t):
-    return render_template('terms/term_en.html', designation=t, value=db.get(t,"None"))
+    return render_template('inside/terms/term_en.html', designation=t, value=db.get(t,"None"), userType = session["isAdmin"])
 
 @app.route("/term/es/<t>")
 def term_es(t):
-    return render_template('terms/term_es.html', designation=t, value=db.get(t,"None"))
+    return render_template('inside/terms/term_es.html', designation=t, value=db.get(t,"None"), userType = session["isAdmin"])
 
 @app.route("/addterm")
 def addterm():
-    return render_template("add_term.html")
+    return render_template("inside/add_term.html", userType = session["isAdmin"])
 
 @app.route("/terms", methods=["POST"])
 def addTerm():
@@ -61,7 +91,7 @@ def addTerm():
     json.dump(sorted_db, file_save, ensure_ascii=False, indent=4)
     file_save.close()
 
-    return render_template("terms.html", designations=sorted_db.keys(), message = info_message)
+    return render_template("inside/terms.html", designations=sorted_db.keys(), message = info_message, userType = session["isAdmin"])
 
 
 @app.route("/term/<designation>", methods=["DELETE"])
@@ -80,7 +110,7 @@ def deleteTerm(designation):
 
 @app.route("/table")
 def table():
-    return render_template("table.html", designations=db.items())
+    return render_template("inside/table.html", designations=db.items(), userType = session["isAdmin"])
 
 
 @app.route("/terms/search")
@@ -92,7 +122,7 @@ def search():
         for designation, description in db.items():
             if re.search(text,designation,flags=re.I) or re.search(text,description["des"],flags=re.I) or re.search(text,description["en"],flags=re.I): 
                 lista.append((designation, description))
-    return render_template("search.html", matched = lista)
+    return render_template("inside/search.html", matched = lista, userType = session["isAdmin"])
 
 
 app.run(host="localhost", port=3000, debug=True)

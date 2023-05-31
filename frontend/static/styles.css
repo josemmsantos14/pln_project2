@@ -5,12 +5,84 @@
   --second-blue: #006daa;
   --third-blue: #003559;
   --dark-blue: #061a40;
+  --error: rgb(255, 85, 85);
 }
 
 * {
   margin: 0;
   padding: 0;
 }
+
+/* ------------------------------LOGIN------------------------------------- */
+.login-container {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.login-container .login-error {
+  margin: 2rem 0;
+  color: var(--error);
+  border: 1px solid var(--error);
+  padding: 0.5rem 1rem;
+  border-radius: 0.4rem;
+  position: absolute;
+  bottom: 3rem;
+}
+.login-container form {
+  width: 30rem;
+  height: 25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 0.1rem solid var(--dark-blue);
+  border-radius: 0.5rem;
+}
+.login-container .login-title {
+  margin-bottom: 2rem;
+}
+.login-container form input {
+  margin: 0.5rem 0;
+  text-align: center;
+  width: 12rem;
+  height: 2.5rem;
+  border: none;
+  border-bottom: 1px solid var(--dark-blue);
+  /* transition: all 0.3s; */
+}
+.login-container form input:hover {
+  border: none;
+  border-bottom: 3px solid var(--dark-blue);
+}
+.login-container form input:focus {
+  outline: none !important;
+  border-bottom: 1px solid var(--dark-blue);
+  border-left: 3px solid var(--dark-blue);
+}
+.login-container form input:valid {
+  outline: none !important;
+  border: none;
+  background-color: var(--light-blue);
+}
+.login-container .login-btn {
+  background-color: var(--third-blue);
+  color: var(--light-blue);
+  border-color: transparent;
+  text-align: center;
+  width: 10rem;
+  margin-top: 3rem;
+  transition: all 0.8s;
+}
+.login-container .login-btn:hover,
+.login-container .login-btn:focus {
+  background-color: var(--light-blue);
+  color: var(--third-blue);
+  border: 1px solid var(--third-blue);
+}
+/* ------------------------------------------------------------------------- */
 
 /* ------------------------------NAVBAR------------------------------------- */
 .navbar {
@@ -42,16 +114,32 @@
 .navbar ul .nav-link {
   width: 10rem;
   padding: 0.7rem 1rem;
-  margin: 0 2rem;
+  margin: 0 1rem;
   text-align: center;
   transition: all 0.8s ease;
 }
-.navbar ul .nav-link:hover,
-.navbar ul .nav-link:focus {
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
   /* border-bottom: 1px solid var(--ligh-blue); */
   border-radius: 0.5rem;
   box-shadow: inset 10rem 0 0 0 var(--light-blue);
   color: var(--dark-blue);
+}
+.user-infos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.user-infos #sign-out {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1rem;
+  transition: all 0.8s ease;
+}
+.user-infos .user-type {
+  margin: 0 1rem;
+  text-transform: uppercase;
 }
 /* --------------------------------------------------------------------------- */
 
