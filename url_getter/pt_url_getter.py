@@ -1,55 +1,74 @@
-import requests
-import json
+import requests, json
 from bs4 import BeautifulSoup
 
 def extractDiseasePage(url):
-    page_html = requests.get(url).text
+    page_html = requests.get(url, headers=headers).text
     page_soup = BeautifulSoup(page_html, "html.parser")
+    titles = page_soup.find_all('h2', class_='field--name-field-title')
+    if not titles:
+        titles = page_soup.find_all('h2')
+        others= page_soup.find_all('h3')
+        titles= titles + others  
+    results = {}
+    for title in titles:
+        description = ''
+        next_sibling = title.find_next_sibling()
+        while next_sibling and next_sibling.name != 'h2'and next_sibling.name != 'h3':
+            description += str(next_sibling)
+            next_sibling = next_sibling.find_next_sibling()
+        results[title.text] = description
+    return results
 
-    page_div = page_soup.find("div", class_="field-name-body")
-    res = page_div.div.div
-    res.name = "page"
-    res.attrs = {}
-    return str(res)
+def extractCategory(page_soup):
+    options = page_soup.find_all("option")
+    selected_option = next(option for option in options if 'selected' in option.attrs)
+    section_name = selected_option.text
+    return section_name
 
-def extractDiseaseList(div):
-    desc = div.find("div", class_="field-content").text
-    title = div.div.h3.a.text
-    #print(div, end="\n\n")
-    return title, desc
+def extractDiseaseListPage(div):
+    title = div.div.span.a.text
+    return title
 
 
-# url_medico = "https://www.mdsaude.com/glossario/"
-url_cuf = "https://www.cuf.pt/saude-a-z"
-search_select = "?pesquisa=&grande_area="
-html = requests.get(url_cuf).text
+url = "https://www.cuf.pt/saude-a-z"
+url1 ="https://www.cuf.pt"
+url2 = "https://www.cuf.pt/saude-a-z?pesquisa=&grande_area="
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"
+}
+html = requests.get(url, headers=headers).text
+soup = BeautifulSoup(html, "html.parser")
 
-soup = BeautifulSoup(html,"html.parser")
 
-divs = soup.find_all("div", class_="views-summary views-summary-unformatted")
+options = soup.find_all("option")
 
+category_urls = []
+
+for option in options:
+    category_urls.append(url2 + option["value"])
+
+lista=[]   
 urls = []
-for div in divs:
-    url = "https://www.atlasdasaude.pt"
-    urls.append(url + div.a["href"])
-
-lista = []
-for url in urls:
-    html_ = requests.get(url).text
-    soup_ = BeautifulSoup(html_, "html.parser")
-
-    divs = soup_.find_all("div", class_="views-row")
-    for div in divs:
+for category_url in category_urls:
+    page_number = 0
+    while True:
+        urlp = f"{category_url}&page={page_number}"
+        html = requests.get(urlp, headers=headers).text
+        soup = BeautifulSoup(html, "html.parser")
+        categoria= extractCategory(soup)
+        divs = soup.find_all("div", class_="views-row")
+        for div in divs:
+            page_url = url1 + div.div.span.a["href"]
+            page_info = extractDiseasePage(page_url)
+            title = extractDiseaseListPage(div)
+            lista.append({categoria:{title:page_info}})
+        next_page = soup.find("li", class_="pager__item pager__item--next")
+        if next_page is None or not next_page.find("a", href=True):
+            break
+        else:
+            page_number += 1
         
-        page_url = url2 + div.div.h3.a["href"]
-        page_info = extractDiseasePage(page_url)
-        title, desc = extractDiseaseList(div)
-        lista.append({title.strip():{"desc":desc.strip(),"page":page_info}})
-
-        
-# print(lista)
-file = open("Aula9/doencas.json","w", encoding="utf8")
-json.dump(lista,file, ensure_ascii=False, indent = 4)
+#print(lista)
+file = open("doencastrabalho.json", "w", encoding="utf-8")
+json.dump(lista, file, ensure_ascii=False, indent=4)
 file.close()
-
-#print("\n\n".join(urls))
