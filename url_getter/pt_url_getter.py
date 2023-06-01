@@ -1,4 +1,5 @@
 import requests, json
+import re
 from bs4 import BeautifulSoup
 
 def extractDiseasePage(url):
@@ -58,6 +59,7 @@ for option in options:
             page_url = url1 + div.div.span.a["href"]
             page_info = extractDiseasePage(page_url)
             title = extractDiseaseListPage(div)
+            title = re.sub(r'\([^()]*\)', "", title).lower().strip()
             category_dict[category_name][title] = page_info
         next_page = soup.find("li", class_="pager__item pager__item--next")
         if next_page is None or not next_page.find("a", href=True):
