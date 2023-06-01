@@ -176,7 +176,7 @@ def search():
             for dis, language in disease.items():
                 for lan, info in language.items():
                     for title, desc in info.items():
-                        if re.search(search,str(desc),flags=re.I):
+                        if re.search(rf'\b{re.escape(search)}\b', str(desc), flags=re.IGNORECASE):
                             if dis not in lista:
                                 lista.append(dis)
     print(lista)
