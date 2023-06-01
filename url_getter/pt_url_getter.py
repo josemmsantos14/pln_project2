@@ -11,19 +11,24 @@ def extractDiseasePage(url):
         others= page_soup.find_all('h3')
         titles= titles + others  
     results = {}
-    for title in titles:
-        description = ''
-        next_sibling = title.find_next_sibling()
-        while next_sibling and next_sibling.name != 'h2'and next_sibling.name != 'h3':
-            description += str(next_sibling)
-            next_sibling = next_sibling.find_next_sibling()
-        results[title.text] = description
+    if len(titles) == 0:
+        description = page_soup.find('div', class_='field--name-field-text-html').get_text()
+        description= re.sub("\n"," ",description)
+        results["Definição geral"] = description
+    else:
+        for title in titles:
+            description = ''
+            next_sibling = title.find_next_sibling()
+            while next_sibling and next_sibling.name != 'h2' and next_sibling.name != 'h3':
+                description += next_sibling.get_text()
+                next_sibling = next_sibling.find_next_sibling()
+            description= re.sub("\n"," ",description)
+            results[title.text] = description
     return results
 
 def extractDiseaseListPage(div):
     title = div.div.span.a.text
     return title
-
 
 url = "https://www.cuf.pt/saude-a-z"
 url1 ="https://www.cuf.pt"
