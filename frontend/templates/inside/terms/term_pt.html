@@ -4,21 +4,16 @@
 
 <div class="term-container">
 <h3 class="term-title rounded">{{designation}}</h3>
+{% for key, value in values %}
   <p>
-    <a
-      class="info-btn btn btn-outline-secondary"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#collapseDes"
-      aria-expanded="false"
-      aria-controls="collapseDes"
-    >
-      Description
-    </a>
-    <div class="collapse" id="collapseDes">
-      <div class="card card-body">{{value['des']}}</div>
+    <p class="info-btn btn btn-outline-secondary">
+      {{key}}
+    </p>
+    <div>
+      <div class="card card-body">{{value}}</div>
     </div>
   </p>
+  {% endfor %}
   <p>
     <a
       class="info-btn btn btn-outline-secondary"

@@ -30,10 +30,9 @@
           <option value="default" selected disabled hidden>
             -- Categories --
           </option>
-          <option value="all">All</option>
-          <option value="+65">+65</option>
-          <option value="cardiac">Cardiac</option>
-          <option value="pulmonary">Pulmonary</option>
+          {% for area in areas %}
+          <option value="{{area}}">{{area}}</option>
+          {% endfor %}
         </select>
 
         <select class="filter-select" name="format" id="format">
@@ -79,10 +78,10 @@
     {% else %}
 
     <div class="list-group">
-      {% for d in designations %}
+      {% if categorie %}
+      {% for d in dis %}
       <li
         class="term-row list-group-item d-flex justify-content-between align-items-center"
-        onmouseover="appearDelete()"
       >
         <a
           href="/term/{{d}}"
@@ -99,6 +98,27 @@
         {% endif %}
       </li>
       {% endfor %}
+      {% else %}
+      {% for d in dis %}
+      <li
+        class="term-row list-group-item d-flex justify-content-between align-items-center"
+      >
+        <a
+          href="/term/{{d}}"
+          class="term-link list-group-item list-group-item-light btn-outline-secondary"
+          id="section-{{ d[0] }}"
+          >{{d}}</a
+        >
+        {% if userType == "admin": %}
+        <div class="delete-term-container">
+          <button type="button" onclick="deleteTerm('{{d}}')">
+            <i class="material-icons">delete</i>
+          </button>
+        </div>
+        {% endif %}
+      </li>
+      {% endfor %}
+      {% endif %}
     </div>
 
     {% endif %}

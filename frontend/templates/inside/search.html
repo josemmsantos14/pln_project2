@@ -3,8 +3,8 @@
 <form action="/terms/search" method="GET">
   <div class="container p-4 w-50">
     <h3>Search Term/Description/Term in English</h3>
-    <label class="form-label">Insert text:</label>
-    <input type="text" class="form-control" name="text" />
+    <label class="form-label" for="search">Insert text:</label>
+    <input type="text" class="form-control" name="search" />
   </div>
   <div class="container w-50">
     <button type="submit" class="btn btn-secondary">Search</button>
@@ -13,16 +13,14 @@
 
 <div class="container p-4 w-50">
   <ul>
-    {% for designation, description in matched %}
+    {% for disease in matched %}
     <li>
       <b>
         <a
-          href="/term/{{designation}}"
+          href="/term/{{disease}}"
           class="list-group-item list-group-item-light btn-outline-secondary"
-          >{{designation}} (EN: {{description["en"]}})</a
-        ></b
-      >
-      {{description["des"]}}
+          >{{disease}}</a>
+        </b>
     </li>
     {% endfor %}
   </ul>
