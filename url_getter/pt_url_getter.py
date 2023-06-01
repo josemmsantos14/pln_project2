@@ -20,12 +20,6 @@ def extractDiseasePage(url):
         results[title.text] = description
     return results
 
-def extractCategory(page_soup):
-    options = page_soup.find_all("option")
-    selected_option = next(option for option in options if 'selected' in option.attrs)
-    section_name = selected_option.text
-    return section_name
-
 def extractDiseaseListPage(div):
     title = div.div.span.a.text
     return title
@@ -46,7 +40,7 @@ category_dict = {}
 
 for option in options:
     category_url = url2 + option["value"]
-    category_name = extractCategory(soup)
+    category_name = option.text
     if category_name not in category_dict:
         category_dict[category_name] = {}
     page_number = 0
