@@ -38,11 +38,11 @@ def check_translation(key):
         english_key = translations.get('en')
         spanish_key = translations.get('es')
 
-    # If the translation doesn't exist, use Google Translate API
+    # If the translation doesn't exist, use Google Translate 
     if not english_key:
         english_key = translate_to_english(key)
 
-    # If the translation doesn't exist, use Google Translate API
+    # If the translation doesn't exist, use Google Translate 
     if not spanish_key:
         spanish_key = translate_to_spanish(key)
 
