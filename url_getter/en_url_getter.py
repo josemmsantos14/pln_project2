@@ -68,38 +68,26 @@ for ul_secondary in ul_list_all_letters:
 
 #region ProcessThirdPage
 
-count = 0
 header = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
     "Accept-Language": "en-US,en;q=0.9",
     # "Referer": "https://www.example.com",
     # Add more headers if required
 }
-for disease, url_disease in url_dic_disease.items():
-    count += 1
+for disease, url_disease in list(url_dic_disease.items()):
     text = ""
     title = ""
     infos_container = None
-    disease_info.clear()
+    # disease_info.clear()
     
-    # print(disease, " : ", url_disease, "\n")
-
-    # if count % 10 == 0:
-    #     time.sleep(100)
-    # while(infos_container == None):
-    #     disease_page = BeautifulSoup(requests.get(url_disease).text,"html.parser")
-    #     # time.sleep(5)
-    #     print(disease_page)
-    #     try:
-    #         infos_container = disease_page.find("div", class_="content").find("div", id= "phmaincontent_0_ctl01_divByLine").find_next_sibling("div")
-    #     except Exception:
-    #         time.sleep(10)
-    #         infos_container = None
+    # print("\n", disease, " : ", url_disease, "\n")
 
     disease_page = BeautifulSoup(requests.get(url_disease, headers=header).text,"html.parser")
-    # time.sleep(5) # ------------------------------------------------------------------------------------ se os headers nao resolverem acrescentem
-    # print(disease_page)
-    infos_container = disease_page.find("div", class_="content").find("div", id= "phmaincontent_0_ctl01_divByLine").find_next_sibling("div")
+    infos_container = disease_page.find("div", class_="content").find("div", id= "phmaincontent_0_ctl01_divByLine").find_next_sibling("div", class_=None)
+    # print(infos_container)
+
+    disease_info = {}
+
     for tag in infos_container.children:
         if tag.name == "h2" and tag.text != "":
             # PARA GUARDAR OS TITLE E TEXT PELO MEIO
@@ -107,13 +95,10 @@ for disease, url_disease in url_dic_disease.items():
                 disease_info[title] = text
             title = tag.text
             text = ""
-            
-            # print("HEADER_2: ", tag, "\n")
-        # elif title != "" and tag.name == "h3" and tag.text != "":
-        #     semi_title = tag.text
-        #     text = ""
-        elif (tag.name == "p" or tag.name == "ul" or tag.name == "h3") and tag.text != "":
-            text += str(tag)
+
+        elif (tag.name == "p" or tag.name == "ul" or tag.name == "h3"): # and tag.text != "":
+            text += str(tag.text)
+            # print(text)
 
     # PARA GUARDAR OS TITLE E TEXT FINAL
     disease_info[title] = text
