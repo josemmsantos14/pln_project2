@@ -7,10 +7,10 @@ def content(heading):
     if heading:
         next_tag = heading.find_next()
         while next_tag and next_tag.name != "h2":
-            #content += next_tag.get_text()
-            content += str(next_tag)
+            content += next_tag.get_text()
+            #content += str(next_tag)
             next_tag = next_tag.find_next()
-    #content = re.sub("\n", " ", content)
+    content = re.sub("\n", " ", content)
     return content
 
 url_es = "https://middlesexhealth.org/learning-center/espanol/enfermedades-y-afecciones"
@@ -32,6 +32,7 @@ for u in urls:
     soup_ = BeautifulSoup(html_, "html.parser")
 
     term = soup_.find("div", class_="col-12").text.strip()
+    term = re.sub(r'\([^()]*\)', "", term).lower().strip()
     info = soup_.find("div", class_="edit-module").text
 
     description_heading = soup_.find("h2", string="Perspectiva general")

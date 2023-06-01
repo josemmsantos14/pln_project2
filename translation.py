@@ -1,7 +1,7 @@
 from deep_translator import GoogleTranslator
+import json
 
 translator = GoogleTranslator(source='pt', target='en')
-import json
 
 file_in = open("exemplo_teste.json",encoding="utf-8")
 
@@ -20,3 +20,5 @@ json.dump(new_dici,file_out,ensure_ascii=False, indent=4)
 file_out.close()
 
 #translator.translate("hoje está um dia bonito")
+
+re.sub(r'\([^()]*\)', "", text)
