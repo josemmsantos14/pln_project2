@@ -2,6 +2,7 @@ import requests
 import json
 import time
 import random
+import re
 from bs4 import BeautifulSoup
 
 #region VariblesDeclar
@@ -81,7 +82,7 @@ for disease, url_disease in url_dic_disease.items():
     infos_container = None
     disease_info.clear()
     
-    print(disease, " : ", url_disease, "\n")
+    # print(disease, " : ", url_disease, "\n")
 
     # if count % 10 == 0:
     #     time.sleep(100)
@@ -117,6 +118,7 @@ for disease, url_disease in url_dic_disease.items():
     # PARA GUARDAR OS TITLE E TEXT FINAL
     disease_info[title] = text
     # PARA GUARDAR TODAS AS INFORMAÇÕES RELATIVAS A CADA DOENÇA
+    disease = re.sub(r'\([^()]*\)', "", disease).lower().strip()
     disease_all_info[disease] = disease_info
 
 # print(disease_all_info)
