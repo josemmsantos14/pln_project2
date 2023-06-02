@@ -3,12 +3,12 @@ $(document).ready(function () {
 });
 
 function deleteTerm(designation) {
-  $.ajax("/term/" + designation, {
+  $.ajax("/delete/" + designation, {
     type: "DELETE",
     success: function (data) {
-      window.location.href = "/terms";
-      location.reload();
+      // window.location.href = "/terms";
       fetchData();
+      location.reload();
     },
     error: function (error) {
       console.error("Error:", error);
