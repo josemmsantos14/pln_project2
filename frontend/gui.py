@@ -73,6 +73,7 @@ def terms():
     categories_opt = None
     format_opt = None
     a_diseases = diseases
+    diseases_table = {}
     print(area_disease.items())
     if request.method == "POST":
         a_diseases.clear()
@@ -84,7 +85,11 @@ def terms():
                 a_diseases = d
         print(format_opt)
         print(categories_opt)
-    return render_template('inside/terms/terms.html', dis=a_diseases, designations_table=diseases_info.items(), areas = areas, categorie = categories_opt, format_data = format_opt, userType = session["isAdmin"])
+        for disease, info in diseases_info.items():
+            if disease in a_diseases:
+                diseases_table[disease] = info
+
+    return render_template('inside/terms/terms.html', dis=a_diseases, designations_table=diseases_table.items(), areas = areas, categorie = categories_opt, format_data = format_opt, userType = session["isAdmin"])
 
 @app.route("/term/<t>")
 def term_pt(t):
@@ -100,50 +105,82 @@ def term_pt(t):
 def term_en(t):
     for d, i in diseases_info.items():
         if d == t:
-            print(t)
-            print(d)
+            # print(t)
+            # print(d)
             value = diseases_info.get(d, None)
             value_en = value["EN"].items()
-    return render_template('inside/terms/term_en.html', designation=t, values=value_en, userType = session["isAdmin"])
+            term = list(value["EN"].items())[0][1]
+    return render_template('inside/terms/term_en.html',designation_pt =t, designation=term, values=value_en, userType = session["isAdmin"])
 
 @app.route("/term/es/<t>")
 def term_es(t):
     for d, i in diseases_info.items():
         if d == t:
-            print(t)
-            print(d)
+            # print(t)
+            # print(d)
             value = diseases_info.get(d, None)
             value_es = value["ES"].items()
-    return render_template('inside/terms/term_es.html', designation=t, values=value_es, userType = session["isAdmin"])
+            term = list(value["ES"].items())[0][1]
+    return render_template('inside/terms/term_es.html',designation_pt =t, designation=term, values=value_es, userType = session["isAdmin"])
 
 @app.route("/addterm")
 def addterm():
-    return render_template("inside/add_term.html", userType = session["isAdmin"])
+    return render_template("inside/add_term.html", areas = areas, userType = session["isAdmin"])
 
-@app.route("/terms", methods=["POST"])
+@app.route("/term", methods=["POST"])
 def addTerm():
-    print(request.form)
-    designation = request.form["designation"]
-    translation = request.form["translation"]
+    # print(request.form)
+    categoria = request.form["areas"]
+    designation_disease = request.form["designation"]
+    translation_en = request.form["en"]
+    translation_es = request.form["es"]
     description = request.form["description"]
 
-    if designation not in db:
-        info_message = "Term Added"
-    else:
-        info_message = "Term Updated!"
+    for area, disease in db.items():
+        if designation_disease not in disease:
+            info_message = "Term Added"
+        else:
+            info_message = "Term Updated!"
 
-    db[designation] = {"des": description, "en": translation}
+    db[categoria][designation_disease] = {
+            "PT":{
+                "Termo":designation_disease,
+                "Descrição":description
+            },
+            "EN":{
+                "Term":translation_en
+            },
+            "ES":{
+                "Plazo":translation_es
+            }
+            }
+    db[areas[0]][designation_disease] = {
+            "PT":{
+                "Termo":designation_disease,
+                "Descrição":description
+            },
+            "EN":{
+                "Term":translation_en
+            },
+            "ES":{
+                "Plazo":translation_es
+            }
+            }
 
     # voltar a ordenar o dicionário depois de adicionar o novo termo
-    myKeys = list(db.keys())
-    myKeys = sorted(myKeys, key=lambda s: s.casefold())
-    sorted_db = {i: db[i] for i in myKeys}
+    for area, disease in db.items():
+        if area == categoria:
+            myKeys = list(disease.keys())
+            myKeys = sorted(myKeys, key=lambda s: s.casefold())
+            print(myKeys)
+            # sorted_db = {i: db[i] for i in myKeys}
+            
 
-    file_save = open("terms.json","w", encoding="utf-8")
-    json.dump(sorted_db, file_save, ensure_ascii=False, indent=4)
+    file_save = open("merged_data.json","w", encoding="utf-8")
+    json.dump(db, file_save, ensure_ascii=False, indent=4)
     file_save.close()
 
-    return render_template("inside/terms.html", designations=sorted_db.keys(), message = info_message, userType = session["isAdmin"])
+    return render_template("inside/terms/terms.html",  dis=diseases, designations_table=diseases_info.items(), areas = areas, userType = session["isAdmin"])
 
 
 @app.route("/term/<designation>", methods=["DELETE"])

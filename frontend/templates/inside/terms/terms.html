@@ -20,23 +20,29 @@
 <div class="terms-container">
   <div class="terms-header">
     {% if categorie %}
-    <h3 class="terms-title">{{categorie}}</h3>
+    <div class="terms-title-container">
+      <h3 class="terms-title">{{categorie}}</h3>
+      {% if userType == "admin": %}
+      <a href="/addterm" class="add-icon"><i class="material-icons">add</i></a>
+      {% endif %}
+    </div>
     {% else %}
-    <h3 class="terms-title">Glossary</h3>
+    <div class="terms-title-container">
+      <h3 class="terms-title">Glossary</h3>
+      {% if userType == "admin": %}
+      <a href="/addterm" class="add-icon"><i class="material-icons">add</i></a>
+      {% endif %}
+    </div>
     {% endif %}
     <div class="filters">
       <form action="" method="POST" enctype="multipart/form-data">
         <select class="filter-select" name="categories" id="categories">
-          <option value="default" selected disabled hidden>
-            -- Categories --
-          </option>
           {% for area in areas %}
           <option value="{{area}}">{{area}}</option>
           {% endfor %}
         </select>
 
         <select class="filter-select" name="format" id="format">
-          <option value="default" selected disabled hidden>-- Format --</option>
           <option value="list">List</option>
           <option value="table">Table</option>
         </select>
@@ -54,15 +60,15 @@
         <tr>
           <th>Term</th>
           <th>Translation EN</th>
-          <th>Description</th>
+          <th>Translation ES</th>
         </tr>
       </thead>
       <tbody>
-        {% for key, d in designations_table %}
+        {% for disease, info in designations_table %}
         <tr>
-          <td>{{ key }}</td>
-          <td>{{ d["en"] }}</td>
-          <td>{{ d["des"] }}</td>
+          <td>{{ disease }}</td>
+          <td>{{ info["EN"]["Term"] }}</td>
+          <td>{{ info["ES"]["Plazo"] }}</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -70,7 +76,7 @@
         <tr>
           <th>Term</th>
           <th>Translation EN</th>
-          <th>Description</th>
+          <th>Translation ES</th>
         </tr>
       </tfoot>
     </table>
@@ -78,8 +84,7 @@
     {% else %}
 
     <div class="list-group">
-      {% if categorie %}
-      {% for d in dis %}
+      {% if categorie %} {% for d in dis %}
       <li
         class="term-row list-group-item d-flex justify-content-between align-items-center"
       >
@@ -97,9 +102,7 @@
         </div>
         {% endif %}
       </li>
-      {% endfor %}
-      {% else %}
-      {% for d in dis %}
+      {% endfor %} {% else %} {% for d in dis %}
       <li
         class="term-row list-group-item d-flex justify-content-between align-items-center"
       >
@@ -117,8 +120,7 @@
         </div>
         {% endif %}
       </li>
-      {% endfor %}
-      {% endif %}
+      {% endfor %} {% endif %}
     </div>
 
     {% endif %}
