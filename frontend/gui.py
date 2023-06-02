@@ -123,64 +123,132 @@ def term_es(t):
             term = list(value["ES"].items())[0][1]
     return render_template('inside/terms/term_es.html',designation_pt =t, designation=term, values=value_es, userType = session["isAdmin"])
 
-@app.route("/addterm")
+@app.route("/addterm", methods=["GET","POST"])
 def addterm():
+    if request.method == "POST":
+        # categoria = request.form.get("areas")
+        # designation_disease = request.form.get("designation")
+        # translation_en = request.form.get("en")
+        # translation_es = request.form.get("es")
+        # description = request.form.get("description")
+        categoria = request.form["areas"]
+        designation_disease = request.form["designation"]
+        translation_en = request.form["en"]
+        translation_es = request.form["es"]
+        description = request.form["description"]
+        print("\n",categoria)
+        print(designation_disease)
+        print(translation_en)
+        print(translation_es)
+        print(description,"\n")
+
+        for area, disease in db.items():
+            if designation_disease not in disease:
+                info_message = "Term Added"
+            else:
+                info_message = "Term Updated!"
+
+        db[categoria][designation_disease] = {
+                "PT":{
+                    "Termo":designation_disease,
+                    "Descrição":description
+                },
+                "EN":{
+                    "Term":translation_en
+                },
+                "ES":{
+                    "Plazo":translation_es
+                }
+                }
+        db[areas[0]][designation_disease] = {
+                "PT":{
+                    "Termo":designation_disease,
+                    "Descrição":description
+                },
+                "EN":{
+                    "Term":translation_en
+                },
+                "ES":{
+                    "Plazo":translation_es
+                }
+                }
+
+        # voltar a ordenar o dicionário depois de adicionar o novo termo
+        for area, disease in db.items():
+            if area == categoria:
+                myKeys = list(disease.keys())
+                myKeys = sorted(myKeys, key=lambda s: s.casefold())
+                # print(myKeys)
+                # sorted_db = {i: db[i] for i in myKeys}
+                
+
+        file_save = open("merged_data.json","w", encoding="utf-8")
+        json.dump(db, file_save, ensure_ascii=False, indent=4)
+        file_save.close()
+        load_data()
+        return render_template("inside/terms/terms.html",  dis=diseases, designations_table=diseases_info.items(), areas = areas,categorie="Todas as Grandes Áreas", format_data ="list", userType = session["isAdmin"])
     return render_template("inside/add_term.html", areas = areas, userType = session["isAdmin"])
 
-@app.route("/term", methods=["POST"])
-def addTerm():
-    # print(request.form)
-    categoria = request.form["areas-disease"]
-    designation_disease = request.form["designation"]
-    translation_en = request.form["en"]
-    translation_es = request.form["es"]
-    description = request.form["description"]
+# @app.route("/term", methods=["GET","POST"])
+# def addTerm():
+#     if request.method == "POST":
+#         categoria = request.form.get("areas")
+#         designation_disease = request.form.get("designation")
+#         translation_en = request.form.get("en")
+#         translation_es = request.form.get("es")
+#         description = request.form.get("description")
+#         print("\n",categoria)
+#         print(designation_disease)
+#         print(translation_en)
+#         print(translation_es)
+#         print(description,"\n")
 
-    for area, disease in db.items():
-        if designation_disease not in disease:
-            info_message = "Term Added"
-        else:
-            info_message = "Term Updated!"
+#         for area, disease in db.items():
+#             if designation_disease not in disease:
+#                 info_message = "Term Added"
+#             else:
+#                 info_message = "Term Updated!"
 
-    db[categoria][designation_disease] = {
-            "PT":{
-                "Termo":designation_disease,
-                "Descrição":description
-            },
-            "EN":{
-                "Term":translation_en
-            },
-            "ES":{
-                "Plazo":translation_es
-            }
-            }
-    db[areas[0]][designation_disease] = {
-            "PT":{
-                "Termo":designation_disease,
-                "Descrição":description
-            },
-            "EN":{
-                "Term":translation_en
-            },
-            "ES":{
-                "Plazo":translation_es
-            }
-            }
+#         db[categoria][designation_disease] = {
+#                 "PT":{
+#                     "Termo":designation_disease,
+#                     "Descrição":description
+#                 },
+#                 "EN":{
+#                     "Term":translation_en
+#                 },
+#                 "ES":{
+#                     "Plazo":translation_es
+#                 }
+#                 }
+#         db[areas[0]][designation_disease] = {
+#                 "PT":{
+#                     "Termo":designation_disease,
+#                     "Descrição":description
+#                 },
+#                 "EN":{
+#                     "Term":translation_en
+#                 },
+#                 "ES":{
+#                     "Plazo":translation_es
+#                 }
+#                 }
 
-    # voltar a ordenar o dicionário depois de adicionar o novo termo
-    for area, disease in db.items():
-        if area == categoria:
-            myKeys = list(disease.keys())
-            myKeys = sorted(myKeys, key=lambda s: s.casefold())
-            print(myKeys)
-            # sorted_db = {i: db[i] for i in myKeys}
-            
+#         # voltar a ordenar o dicionário depois de adicionar o novo termo
+#         for area, disease in db.items():
+#             if area == categoria:
+#                 myKeys = list(disease.keys())
+#                 myKeys = sorted(myKeys, key=lambda s: s.casefold())
+#                 # print(myKeys)
+#                 # sorted_db = {i: db[i] for i in myKeys}
+                
 
-    file_save = open("merged_data.json","w", encoding="utf-8")
-    json.dump(db, file_save, ensure_ascii=False, indent=4)
-    file_save.close()
+#         file_save = open("merged_data.json","w", encoding="utf-8")
+#         json.dump(db, file_save, ensure_ascii=False, indent=4)
+#         file_save.close()
+#         load_data()
 
-    return render_template("inside/terms/terms.html",  dis=diseases, designations_table=diseases_info.items(), areas = areas,categorie="Todas as Grandes Áreas", format_data ="list", userType = session["isAdmin"])
+#     return render_template("inside/terms/terms.html",  dis=diseases, designations_table=diseases_info.items(), areas = areas,categorie="Todas as Grandes Áreas", format_data ="list", userType = session["isAdmin"])
 
 
 @app.route("/term/<designation>", methods=["DELETE"])
