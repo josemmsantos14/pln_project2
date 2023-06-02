@@ -8,7 +8,7 @@
     <form action="/term" method="POST">
       <div class="mb-3">
         <!-- <label class="form-label">Designation:</label> -->
-        <select name="areas" id="areas">
+        <select name="areas-disease" id="areas-disease">
           {% for area in areas %} {% if area == "Todas as Grandes Áreas" %} {%
           else %}
           <option value="{{area}}">{{area}}</option>

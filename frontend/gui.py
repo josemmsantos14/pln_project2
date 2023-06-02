@@ -130,7 +130,7 @@ def addterm():
 @app.route("/term", methods=["POST"])
 def addTerm():
     # print(request.form)
-    categoria = request.form["areas"]
+    categoria = request.form["areas-disease"]
     designation_disease = request.form["designation"]
     translation_en = request.form["en"]
     translation_es = request.form["es"]
@@ -180,7 +180,7 @@ def addTerm():
     json.dump(db, file_save, ensure_ascii=False, indent=4)
     file_save.close()
 
-    return render_template("inside/terms/terms.html",  dis=diseases, designations_table=diseases_info.items(), areas = areas, userType = session["isAdmin"])
+    return render_template("inside/terms/terms.html",  dis=diseases, designations_table=diseases_info.items(), areas = areas,categorie="Todas as Grandes Áreas", format_data ="list", userType = session["isAdmin"])
 
 
 @app.route("/term/<designation>", methods=["DELETE"])

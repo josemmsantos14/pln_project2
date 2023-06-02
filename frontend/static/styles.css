@@ -250,6 +250,9 @@
   color: var(--light-blue);
   padding: 1rem 2rem;
 }
+.info {
+  text-align: justify;
+}
 .info-btn {
   width: 8rem;
   border: 0.05rem solid var(--third-blue);
