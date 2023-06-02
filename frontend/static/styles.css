@@ -210,6 +210,20 @@
   border-radius: 0.5rem;
   color: var(--third-blue);
 }
+.filter-btn {
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 0.1rem solid var(--dark-blue);
+  border-radius: 0.5rem;
+  color: var(--dark-blue);
+  background: transparent;
+  transition: all 0.8s ease;
+}
+.filter-btn:hover {
+  background: var(--light-blue);
+  border-color: var(--second-blue);
+  color: var(--second-blue);
+}
 .term-row {
   padding: 0.4rem 0.5rem 0.4rem 0;
 }

@@ -182,7 +182,8 @@ def addterm():
         json.dump(db, file_save, ensure_ascii=False, indent=4)
         file_save.close()
         load_data()
-        return render_template("inside/terms/terms.html",  dis=diseases, designations_table=diseases_info.items(), areas = areas, userType = session["isAdmin"])
+        # return render_template("inside/terms/terms.html",  dis=diseases, designations_table=diseases_info.items(), areas = areas, userType = session["isAdmin"])
+        return redirect("/terms")
     return render_template("inside/add_term.html", areas = areas, userType = session["isAdmin"])
 
 
