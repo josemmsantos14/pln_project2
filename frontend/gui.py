@@ -190,16 +190,18 @@ def addterm():
 @app.route("/delete/<designation>", methods=["DELETE"])
 def deleteTerm(designation):
     
-    for area, disease in db.items():
-        if designation in disease:
-            print(designation)
-            #del db[disease]
-            del disease[designation] 
-            # print(db.get(designation))
-    file_save = open("merged_data.json","w", encoding="utf-8")
-    json.dump(db, file_save, ensure_ascii=False, indent=4)
-    file_save.close()
-    load_data()
+    if request.method == "DELETE":
+        for area, disease in db.items():
+            if designation in disease:
+                print(designation)
+                #del db[disease]
+                del disease[designation] 
+                # print(db.get(designation))
+        file_save = open("merged_data.json","w", encoding="utf-8")
+        json.dump(db, file_save, ensure_ascii=False, indent=4)
+        file_save.close()
+        load_data()
+        return redirect("/terms")
 
     return render_template("terms.html")
 

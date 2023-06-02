@@ -7,8 +7,8 @@ function deleteTerm(designation) {
     type: "DELETE",
     success: function (data) {
       // window.location.href = "/terms";
-      fetchData();
       location.reload();
+      fetchData();
     },
     error: function (error) {
       console.error("Error:", error);
